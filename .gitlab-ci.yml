@@ -14,17 +14,18 @@ cache:
     - .ccache/
 
 default:
-  image: debian:bookworm-slim
+  # Since the runner is Arch, no need for Debian image
+  tags:
+    - archlinux
+    - firefox
+    - acreetionfox
 
 before_script:
-  # Update packages and install Firefox build deps
-  - apt-get update && apt-get install -y git curl wget python3 python3-pip unzip zip \
-    build-essential autoconf2.13 clang llvm lld nodejs npm yasm \
-    libgtk-3-dev libdbus-glib-1-dev libxt-dev libpulse-dev \
-    libasound2-dev libx11-xcb-dev libxrender-dev libxcomposite-dev \
-    libxdamage-dev libxrandr-dev libxi-dev libfreetype6-dev \
-    libfontconfig1-dev libglib2.0-dev libpango1.0-dev libcairo2-dev \
-    ccache sccache
+  # Install build dependencies on Arch
+  - sudo pacman -Syu --noconfirm
+  - sudo pacman -S --noconfirm git base-devel python python-pip nodejs npm yasm \
+    clang llvm lld gtk3 dbus-glib libxt pulseaudio alsa-lib libx11 libxcomposite \
+    libxdamage libxrandr libxi freetype2 fontconfig glib2 pango cairo ccache sccache unzip zip
 
 prepare:
   stage: prepare
@@ -57,7 +58,7 @@ package:
   stage: package
   script:
     - cd upstream/obj-*/dist
-    - tar -czf "$CI_PROJECT_DIR/${CI_PROJECT_NAME}-linux.tar.gz" bin/*
+    - tar -czf $CI_PROJECT_DIR/${CI_PROJECT_NAME}-linux.tar.gz bin/*
   artifacts:
     paths:
       - "${CI_PROJECT_NAME}-linux.tar.gz"
