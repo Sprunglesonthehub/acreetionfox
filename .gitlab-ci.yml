@@ -16,8 +16,6 @@ cache:
 default:
   # Since the runner is Arch, no need for Debian image
   tags:
-    - archlinux
-    - firefox
     - acreetion-fox
 
 before_script:
