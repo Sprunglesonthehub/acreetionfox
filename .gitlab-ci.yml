@@ -20,7 +20,6 @@ default:
 
 before_script:
   # Install build dependencies on Arch
-  - sudo pacman -Syu --noconfirm
   - sudo pacman -S --noconfirm git base-devel python python-pip nodejs npm yasm \
     clang llvm lld gtk3 dbus-glib libxt pulseaudio alsa-lib libx11 libxcomposite \
     libxdamage libxrandr libxi freetype2 fontconfig glib2 pango cairo ccache sccache unzip zip
