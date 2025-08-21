@@ -1,61 +1,36 @@
 stages:
-  - prepare
   - build
-  - package
 
-variables:
-  MOZCONFIG: "$CI_PROJECT_DIR/mozconfig/release.mozconfig"
-  CCACHE_DIR: "$CI_PROJECT_DIR/.ccache"
-  RUSTC_WRAPPER: "sccache"
-
-cache:
-  key: ccache
-  paths:
-    - .ccache/
-
+# The default section is used to specify global settings for all jobs.
 default:
-  # Since the runner is Arch, no need for Debian image
   tags:
     - acreetion-fox
 
-before_script:
-  # Install build dependencies on Arch
-  - sudo pacman -S --noconfirm git base-devel python python-pip nodejs npm yasm \
-    clang llvm lld gtk3 dbus-glib libxt pulseaudio alsa-lib libx11 libxcomposite \
-    libxdamage libxrandr libxi freetype2 fontconfig glib2 pango cairo ccache sccache unzip zip
-
-prepare:
-  stage: prepare
-  script:
-    - bash bootstrap_fork.sh
-  artifacts:
-    paths:
-      - upstream
-      - mozconfig
-      - patches
-      - policies
-      - browser/branding
-    expire_in: 1 week
-
-build:
+# The main job that will build and package the ISO.
+build_and_package:
   stage: build
   script:
+    - echo "Installing build dependencies on Arch..."
+    - sudo pacman -S --noconfirm git base-devel python python-pip nodejs npm yasm \
+      clang llvm lld gtk3 dbus-glib libxt pulseaudio alsa-lib libx11 libxcomposite \
+      libxdamage libxrandr libxi freetype2 fontconfig glib2 pango cairo ccache sccache unzip zip
+
+    - echo "Preparing the source code..."
+    - bash bootstrap_fork.sh
     - cd upstream
     - git checkout main
     - cd ..
     - git apply patches/*.patch || true
+
+    - echo "Building the application..."
     - ./upstream/mach bootstrap --application-choice browser --no-interactive
     - ./upstream/mach build -v
-  artifacts:
-    paths:
-      - upstream/obj-*/dist/bin/
-    expire_in: 1 week
 
-package:
-  stage: package
-  script:
+    - echo "Packaging the application..."
     - cd upstream/obj-*/dist
     - tar -czf $CI_PROJECT_DIR/${CI_PROJECT_NAME}-linux.tar.gz bin/*
+  
+  # The artifacts section is now defined on the single job.
   artifacts:
     paths:
       - "${CI_PROJECT_NAME}-linux.tar.gz"
