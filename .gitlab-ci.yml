@@ -18,7 +18,7 @@ default:
   tags:
     - archlinux
     - firefox
-    - acreetionfox
+    - acreetion-fox
 
 before_script:
   # Install build dependencies on Arch
