@@ -1,0 +1,10 @@
+From: You <you@example.com>
+Subject: [PATCH] Disable Telemetry and crash reporting
+
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@
+-pref("toolkit.telemetry.enabled", true);
+-pref("datareporting.healthreport.uploadEnabled", true);
++pref("toolkit.telemetry.enabled", false);
++pref("datareporting.healthreport.uploadEnabled", false);

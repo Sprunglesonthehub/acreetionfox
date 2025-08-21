@@ -1,0 +1,8 @@
+diff --git a/browser/components/pocket/Pocket.cpp b/browser/components/pocket/Pocket.cpp
+index abcdef0..1234567 100644
+--- a/browser/components/pocket/Pocket.cpp
++++ b/browser/components/pocket/Pocket.cpp
+@@ -10,7 +10,7 @@ void Pocket::Init() {
+-  mEnabled = Preferences::GetBool("extensions.pocket.enabled", true);
++  mEnabled = false;
+ }

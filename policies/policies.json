@@ -1,0 +1,16 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "DisableFirefoxStudies": true,
+    "DisablePocket": true,
+    "DisableSafeBrowsing": true,
+    "CaptivePortal": false,
+    "DisableFirefoxAccounts": true,
+    "DisableFeedbackCommands": true,
+    "SearchBar": "separate",
+    "DefaultSearchEngine": "DuckDuckGo",
+    "ExtensionSettings": {
+      "uBlock0@raymondhill.net": { "installation_mode": "force_installed" }
+    }
+  }
+}

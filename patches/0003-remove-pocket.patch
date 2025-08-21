@@ -1,0 +1,14 @@
+From: You <you@example.com>
+Subject: [PATCH] Remove Pocket integration from newtab/activity stream
+
+--- a/browser/components/newtab/lib/TopStoriesFeed.jsm
++++ b/browser/components/newtab/lib/TopStoriesFeed.jsm
+@@ -1,6 +1,7 @@
+ "use strict";
+ 
+-// Pocket Top Stories integration
++// AcreetionFox: disable Pocket
+ function TopStoriesFeed() {
+-  this.enabled = true;
++  this.enabled = false;
+ }

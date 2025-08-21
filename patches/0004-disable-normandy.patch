@@ -1,0 +1,10 @@
+From: You <you@example.com>
+Subject: [PATCH] Disable Normandy and Shield Studies
+
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@
+-pref("app.normandy.enabled", true);
+-pref("app.shield.optoutstudies.enabled", true);
++pref("app.normandy.enabled", false);
++pref("app.shield.optoutstudies.enabled", false);

@@ -1,0 +1,8 @@
+From: You <you@example.com>
+Subject: [PATCH] Disable geolocation provider
+
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@
+-pref("geo.enabled", true);
++pref("geo.enabled", false);

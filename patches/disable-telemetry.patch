@@ -1,0 +1,8 @@
+diff --git a/toolkit/components/telemetry/TelemetryStartup.cpp b/toolkit/components/telemetry/TelemetryStartup.cpp
+index abcdef0..1234567 100644
+--- a/toolkit/components/telemetry/TelemetryStartup.cpp
++++ b/toolkit/components/telemetry/TelemetryStartup.cpp
+@@ -50,7 +50,7 @@ void TelemetryStartup::Init() {
+-  mEnabled = Preferences::GetBool("toolkit.telemetry.enabled", true);
++  mEnabled = false;
+ }

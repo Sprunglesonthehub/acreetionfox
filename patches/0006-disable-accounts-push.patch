@@ -1,0 +1,10 @@
+From: You <you@example.com>
+Subject: [PATCH] Disable Firefox Accounts and Push Service
+
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@
+-pref("identity.fxaccounts.enabled", true);
+-pref("dom.push.enabled", true);
++pref("identity.fxaccounts.enabled", false);
++pref("dom.push.enabled", false);

@@ -1,0 +1,13 @@
+From: You <you@example.com>
+Subject: [PATCH] Rebrand Firefox to AcreetionFox
+
+--- a/browser/branding/official/configure.sh
++++ b/browser/branding/official/configure.sh
+@@ -1,5 +1,5 @@
+-MOZ_APP_DISPLAYNAME=Firefox
++MOZ_APP_DISPLAYNAME=AcreetionFox
+ MOZ_BRANDING_DIRECTORY=browser/branding/official
+ MOZ_OFFICIAL_BRANDING_DIRECTORY=browser/branding/official
+ MOZ_APP_BASENAME=firefox
+-APP_NAME=firefox
++APP_NAME=acreetionfox

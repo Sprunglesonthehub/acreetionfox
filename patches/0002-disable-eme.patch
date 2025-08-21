@@ -1,0 +1,11 @@
+From: You <you@example.com>
+Subject: [PATCH] Disable EME/Widevine DRM completely
+
+--- a/browser/base/content/browser-media.js
++++ b/browser/base/content/browser-media.js
+@@ -1,5 +1,7 @@
+ // Media handling
++
++// AcreetionFox: disable all EME references
+ Services.prefs.setBoolPref("media.eme.enabled", false);
+ Services.prefs.setBoolPref("media.gmp-widevinecdm.visible", false);

@@ -5,8 +5,8 @@ set -euo pipefail
 FORK_NAME="AcreetionFox"
 REPO_NAME="acreetionfox"
 BRANDING_REPO="${BRANDING_REPO:-https://github.com/Sprunglesonthehub/arttulcat_branding.git}"
-UPSTREAM_REPO="${UPSTREAM_REPO:-https://example.com/your/firefox-esr-mirror.git}"
-ESR_BRANCH="${ESR_BRANCH:-mozilla-esr}"
+UPSTREAM_REPO="${UPSTREAM_REPO:-https://github.com/mozilla-firefox/firefox.git}"
+ESR_BRANCH="${ESR_BRANCH:-main}"   # can switch to mozilla-esr115 if desired
 
 # ── Pre-flight ─────────────────────────────────────────────────────────────────
 if [ -n "$(ls -A 2>/dev/null || true)" ] && [ ! -d .git ]; then
@@ -23,7 +23,13 @@ mkdir -p browser/branding
 touch patches/.keep ci/.keep
 
 # ── Bring in upstream as submodule ─────────────────────────────────────────────
-if [ ! -d upstream/.git ]; then
+if [ -d upstream/.git ]; then
+  echo "==> Upstream already present"
+else
+  if [ -d upstream ] && [ ! -d upstream/.git ]; then
+    echo "==> Cleaning invalid upstream dir"
+    rm -rf upstream
+  fi
   echo "==> Adding upstream submodule: $UPSTREAM_REPO"
   git submodule add -b "$ESR_BRANCH" "$UPSTREAM_REPO" upstream || true
 fi
@@ -43,7 +49,7 @@ fi
 
 # ── mozconfig ──────────────────────────────────────────────────────────────────
 cat > mozconfig/release.mozconfig <<EOF
-# AcreetionFox build config
+# $FORK_NAME build config
 ac_add_options --enable-release
 ac_add_options --disable-debug
 ac_add_options --enable-optimize
@@ -108,5 +114,45 @@ lockPref("identity.fxaccounts.enabled", false);
 lockPref("browser.promo.focus.enabled", false);
 EOF
 
-echo "==> AcreetionFox setup complete."
-echo "Now run: ./mach bootstrap --application-choice browser && MOZCONFIG=\$PWD/mozconfig/release.mozconfig ./mach build"
+# ── Patch templates ────────────────────────────────────────────────────────────
+cat > patches/disable-telemetry.patch <<'EOF'
+diff --git a/toolkit/components/telemetry/TelemetryStartup.cpp b/toolkit/components/telemetry/TelemetryStartup.cpp
+index abcdef0..1234567 100644
+--- a/toolkit/components/telemetry/TelemetryStartup.cpp
++++ b/toolkit/components/telemetry/TelemetryStartup.cpp
+@@ -50,7 +50,7 @@ void TelemetryStartup::Init() {
+-  mEnabled = Preferences::GetBool("toolkit.telemetry.enabled", true);
++  mEnabled = false;
+ }
+EOF
+
+cat > patches/disable-eme.patch <<'EOF'
+diff --git a/dom/media/eme/EMEUtils.cpp b/dom/media/eme/EMEUtils.cpp
+index abcdef0..1234567 100644
+--- a/dom/media/eme/EMEUtils.cpp
++++ b/dom/media/eme/EMEUtils.cpp
+@@ -25,7 +25,7 @@ bool EMEUtils::IsEMEEnabled() {
+-  return Preferences::GetBool("media.eme.enabled", true);
++  return false;
+ }
+EOF
+
+cat > patches/remove-pocket.patch <<'EOF'
+diff --git a/browser/components/pocket/Pocket.cpp b/browser/components/pocket/Pocket.cpp
+index abcdef0..1234567 100644
+--- a/browser/components/pocket/Pocket.cpp
++++ b/browser/components/pocket/Pocket.cpp
+@@ -10,7 +10,7 @@ void Pocket::Init() {
+-  mEnabled = Preferences::GetBool("extensions.pocket.enabled", true);
++  mEnabled = false;
+ }
+EOF
+
+echo "==> $FORK_NAME setup complete."
+echo ""
+echo "Next steps:"
+echo "  cd upstream && git checkout $ESR_BRANCH && cd .."
+echo "  git apply patches/*.patch || true"
+echo "  ./mach bootstrap --application-choice browser"
+echo "  MOZCONFIG=\$PWD/mozconfig/release.mozconfig ./mach build"
+

@@ -1,0 +1,12 @@
+From: You <you@example.com>
+Subject: [PATCH] Disable Safe Browsing and Captive Portal checks
+
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@
+-pref("browser.safebrowsing.malware.enabled", true);
+-pref("browser.safebrowsing.phishing.enabled", true);
+-pref("network.captive-portal-service.enabled", true);
++pref("browser.safebrowsing.malware.enabled", false);
++pref("browser.safebrowsing.phishing.enabled", false);
++pref("network.captive-portal-service.enabled", false);
